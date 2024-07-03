@@ -1,0 +1,15 @@
+Question : Percentage of user attended contest 
+Solution : 
+
+/* Write your T-SQL query statement below */
+WITH CTE AS
+(
+    SELECT CAST(COUNT(user_id) AS DECIMAL) MAX_users
+    FROM USERS
+)
+SELECT R.contest_id, ROUND(((count(U.user_id))/C.MAX_users)*100,2) AS percentage 
+FROM USERS U
+INNER JOIN REGISTER R ON U.user_id = R.user_id
+CROSS JOIN CTE C
+group by R.contest_id, C.MAX_users
+order by percentage DESC, contest_id ASC
